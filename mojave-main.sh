@@ -20,7 +20,7 @@ main() {
 #     update_login_items
 }
 
-DOTFILES_REPO=~/macOS-Empire/dotfiles
+DOTFILES_REPO=~/macOS-Empire
 
 function ask_for_sudo() {
     info "Prompting for sudo password"
