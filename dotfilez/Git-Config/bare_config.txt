@@ -1,0 +1,19 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = true
+	ignorecase = true
+	precomposeunicode = true
+
+[status]
+	showUntrackedFiles = no
+[user]
+	name = Henrik Mårtenzon
+	email = henrikmartenzon@gmail.com
+	username = Martenzi
+[remote "bb_home_config"]
+	url = ssh://Martenzi@bitbucket.org/Martenzi/home_config.git
+	fetch = +refs/heads/*:refs/remotes/bb_home_config/*
+[branch "master"]
+	remote = bb_home_config
+	merge = refs/heads/master

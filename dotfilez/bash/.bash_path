@@ -1,0 +1,19 @@
+#!/bin/env bash
+#   ~/.bash_env
+#
+# POSIX Shell login script. you should put all your environment variables in there. Like LESS, PATH, MANPATH, LC_*
+#
+#   Henrik Mårtenzon
+#       ~Martenzi
+
+echo "*** .bash_path"
+
+# Ensure user-installed binaries take precedence
+export PATH="~/binaries:/usr/local/Cellar:/usr/local/opt:/usr/local/git/bin:/usr/local/mysql/bin:/sw/bin:$PATH"
+
+# What is this for?
+# export PATH=$PATH:
+
+# Testing whether this path is needed...
+# export PATH="/usr/local/Cellar/ruby/2.5.1:$PATH"
+

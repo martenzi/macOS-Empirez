@@ -1,0 +1,151 @@
+source:
+http://chneukirchen.org/blog/archive/2015/02/10-fancy-zsh-tricks-you-may-not-know.html
+
+
+# When editing long lines in the zle line editor, sometimes you want to move “by physical line”, that is, to the character in the terminal line below (like gj and gk in vim).
+
+# We can fake that feature by finding out the terminal width and moving charwise:
+
+_physical_up_line()   { zle backward-char -n $COLUMNS }
+_physical_down_line() { zle forward-char  -n $COLUMNS }
+zle -N physical-up-line _physical_up_line
+zle -N physical-down-line _physical_down_line
+bindkey "\e\e[A" physical-up-line
+bindkey "\e\e[B" physical-down-line
+Now, ESC-up and ESC-down will move by physical line.
+
+# Sometimes it’s nice to do things in random order. Many tools such as image viewers, music or media players have a “shuffle” mode, but when they don’t, you can help yourself with this small trick:
+
+SHUF='oe|REPLY=${(l:5::0:)RANDOM}${(l:5::0:)RANDOM}${(l:5::0:)RANDOM}|'
+Just append ($SHUF) to any glob, and get the matches shuffled:
+
+% touch a b c d
+% echo *($SHUF)
+d c a b
+% echo *($SHUF)
+c a d b
+# Note that this shuffle is slightly biased, but it should not matter in practice. In doubt, use shuf or sort -R or something else…
+
+# Are you getting sick of typing cd ../../.. all the time? Why not type up 3?
+
+up() {
+  local op=print
+  [[ -t 1 ]] && op=cd
+  case "$1" in
+    '') up 1;;
+    -*|+*) $op ~$1;;
+    <->) $op $(printf '../%.0s' {1..$1});;
+    *) local -a seg; seg=(${(s:/:)PWD%/*})
+       local n=${(j:/:)seg[1,(I)$1*]}
+       if [[ -n $n ]]; then
+         $op /$n
+       else
+         print -u2 up: could not find prefix $1 in $PWD
+         return 1
+       fi
+  esac
+}
+# With this helper function, you can do a lot more actually: Say you are in ~/src/zsh/Src/Builtins and want to go to ~/src/zsh. Just say up zsh. Or even just up z.
+
+# And as a bonus, if you capture the output of up, it will print the directory you want, and not change to it. So you can do:
+
+mv foo.c $(up zsh)
+# Previous tricks (#6/#7) introduced the dirstack and how to navigate it. But why type cd -<TAB> and figure out the directory you want to go to when you simply can type cd ~[zsh] and go to the first directory in the dirstack matching zsh? For this, we define the zsh dynamic directory function:
+
+_mydirstack() {
+  local -a lines list
+  for d in $dirstack; do
+    lines+="$(($#lines+1)) -- $d"
+    list+="$#lines"
+  done
+  _wanted -V directory-stack expl 'directory stack' \
+    compadd "$@" -ld lines -S']/' -Q -a list
+}
+zsh_directory_name() {
+  case $1 in
+    c) _mydirstack;;
+    n) case $2 in
+         <0-9>) reply=($dirstack[$2]);;
+         *) reply=($dirstack[(r)*$2*]);;
+       esac;;
+    d) false;;
+  esac
+}
+# The first function is just the completion, so cd ~[<TAB> will work as well.
+
+# Did you ever want to move a file with spaces in the name, and mixed up argument order?
+
+% mv last-will.tex My\ Last\ Will.rtf
+# Pressing ESC-t (transpose-words) between the file names will do the wrong thing by default:
+
+% mv My last-will.tex\ Last\ Will.rtf
+# Luckily, we can teach transpose-words to understand shell syntax:
+
+autoload -Uz transpose-words-match
+zstyle ':zle:transpose-words' word-style shell
+zle -N transpose-words transpose-words-match
+Voila:
+
+% mv My\ Last\ Will.rtf last-will.tex
+# If you are an avid Emacs user like me, you’ll find this function useful. It enters the directory the currently active Emacs file resides in:
+
+cde() {
+  cd ${(Q)~$(emacsclient -e '(with-current-buffer
+                               (window-buffer (selected-window))
+                               default-directory) ')}
+}
+You need the emacs-server functionality enabled for this to work.
+
+I’m working on many different systems and try to keep a portable .zshrc between those. One problem used to be setting $PATH portably, because there is quite some difference among systems. I now let zsh figure out what belongs to $PATH:
+
+export PATH
+path=(
+  ~/bin
+  ~/.gem/ruby/*/bin(Nn[-1])
+  ~/.opam/current/bin
+  ~/.cabal/bin
+  ~/.go/bin
+  /usr/local/bin
+  /usr/local/sbin
+  /usr/bin
+  /usr/sbin
+  /sbin
+  /bin
+  /usr/games
+  /usr/games/bin
+)
+path=( ${(u)^path:A}(N-/) )
+The last line will normalize all paths, and remove duplicates and nonexisting directories. Also, notice how I pick up the latest Ruby version to find the Gem bin dir by sorting them numerically.
+
+One of the hardest things is to set the xterm title “correctly”, because most people do it wrong in some way, and then it will break when you have literal tabs or percent signs or tildes in your command line. Here is what I currently use:
+
+case "$TERM" in
+  xterm*|rxvt*)
+    precmd() {  print -Pn "\e]0;%m: %~\a" }
+    preexec() { print -n "\e]0;$HOST: ${(q)1//(#m)[$'\000-\037\177-']/${(q)MATCH}}\a" }
+esac
+For a cheap, but secure password generator, you can use this:
+
+zpass() {
+  LC_ALL=C tr -dc '0-9A-Za-z_@#%*,.:?!~' < /dev/urandom | head -c${1:-10}
+  echo
+}
+Sometimes it’s interesting to find a file residing in some directory “above” (e.g. Makefile, .git and similar). We can glob these by repeating ../ using the #-operator (You have EXTENDED_GLOB enabled, right?). This will result in all matches, so let’s first sort them by directory depth:
+
+% pwd
+/home/chris/src/zsh/Src/Builtins
+% print -l (../)#Makefile.in(Od)
+../Makefile.in
+../../Makefile.in
+Now we can pick the first one, and also make the file name absolute:
+
+% print (../)#Makefile.in(Od[1]:A)
+/home/chris/src/zsh/Makefile.in
+I knew the #-operator, but it never occurred to me to use it this way before.
+
+Until next time!
+
+NP: Pierced Arrows—On Our Way
+
+Copyright © 2004–2018 Leah Neukirchen
+Loading…

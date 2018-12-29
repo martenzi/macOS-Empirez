@@ -1,0 +1,10 @@
+#!/bin/env bash
+#   ~/.bash_env
+#
+# POSIX Shell login script. you should put all your environment variables in there. Like LESS, PATH, MANPATH, LC_*
+#
+#   Henrik Mårtenzon
+#       ~Martenzi
+
+echo "*** .bash_env"
+
