@@ -17,7 +17,7 @@ main() {
     update_login_items
 }
 
-DOTFILES_REPO=~/macOS-Empire
+DOTFILES_REPO=~/macOS-Empire/dotfiles
 
 function ask_for_sudo() {
     info "Prompting for sudo password"
@@ -37,7 +37,8 @@ function install_homebrew() {
     if hash brew 2>/dev/null; then
         success "Homebrew already exists"
     else
-url=https://raw.githubusercontent.com/Sajjadhosn/dotfiles/master/installers/homebrew_installer
+	#url=https://raw.githubusercontent.com/Sajjadhosn/dotfiles/master/installers/homebrew_installer
+	url=https://bitbucket.org/Martenzi/macos-empirez/src/master/homebrew_installer
         if /usr/bin/ruby -e "$(curl -fsSL ${url})"; then
             success "Homebrew installation succeeded"
         else
