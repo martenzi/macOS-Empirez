@@ -6,6 +6,7 @@ tap "homebrew/core"
 tap "homebrew/services"
 
 ##################### brew #####################
+brew "python3"
 brew "diff-so-fancy"
 brew "ffmpeg" # for being able to manipulate videos for example
 brew "git" # Distributed revision control system
