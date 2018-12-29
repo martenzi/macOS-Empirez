@@ -2,7 +2,7 @@
 
 main() {
     # First things first, asking for sudo credentials
-    ask_for_sudo
+    #ask_for_sudo
     # Installing Homebrew, the basis of anything and everything
     install_homebrew
     # Cloning Dotfiles repository for install_packages_with_brewfile
@@ -42,7 +42,8 @@ function install_homebrew() {
     else
 	#url=https://raw.githubusercontent.com/Sajjadhosn/dotfiles/master/installers/homebrew_installer
 	#url=https://bitbucket.org/Martenzi/macos-empirez/src/master/homebrew_installer
-	url=https://raw.githubusercontent.com/martenzi/macOS-Empirez/master/homebrew_installer
+	#url=https://raw.githubusercontent.com/martenzi/macOS-Empirez/master/homebrew_installer
+	url=https://raw.githubusercontent.com/Homebrew/install/master/install
         if /usr/bin/ruby -e "$(curl -fsSL ${url})"; then
             success "Homebrew installation succeeded"
         else
