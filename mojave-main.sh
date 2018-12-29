@@ -5,16 +5,19 @@ main() {
     ask_for_sudo
     # Installing Homebrew, the basis of anything and everything
     install_homebrew
+    # Cloning Dotfiles repository for install_packages_with_brewfile
+    # to have access to Brewfile
+    clone_dotfiles_repo
     # Installing pip packages so that setup_symlinks can setup the symlinks
     install_pip_packages
-    # Configuring iTerm2
-    configure_iterm2
-    # Update /etc/hosts
-    update_hosts_file
-    # Setting up macOS defaults
-    setup_macOS_defaults
-    # Updating login items
-    update_login_items
+#     Configuring iTerm2
+#     configure_iterm2
+#     Update /etc/hosts
+#     update_hosts_file
+#     Setting up macOS defaults
+#     setup_macOS_defaults
+#     Updating login items
+#     update_login_items
 }
 
 DOTFILES_REPO=~/macOS-Empire/dotfiles
@@ -49,7 +52,7 @@ function install_homebrew() {
 }
 
 function install_packages_with_brewfile() {
-    BREW_FILE_PATH="${DOTFILES_REPO}/homebrew/z.brewfile"
+    BREW_FILE_PATH="${DOTFILES_REPO}/dotfilez/homebrew/z.brewfile"
     info "Installing packages within ${BREW_FILE_PATH}"
     if brew bundle check --file="$BREW_FILE_PATH" &> /dev/null; then
         success "Brewfile's dependencies are satisfied already"
@@ -86,31 +89,31 @@ function install_pip_packages() {
     success "pip packages successfully installed"
 }
 
-# function clone_dotfiles_repo() {
-#     info "Cloning dotfiles repository into ${DOTFILES_REPO}"
-#     if test -e $DOTFILES_REPO; then
-#         substep "${DOTFILES_REPO} already exists"
-#         pull_latest $DOTFILES_REPO
-#         success "Pull successful in ${DOTFILES_REPO} repository"
-#     else
-#         url=https://bitbucket.org/Martenzi/macos-empire.git
-#         if git clone "$url" $DOTFILES_REPO; then
-#             success "Cloned into ${DOTFILES_REPO}"
-#         else
-#             error "Cloning into ${DOTFILES_REPO} failed"
-#             exit 1
-#         fi
-#     fi
-# }
-# 
-# function pull_latest() {
-#     substep "Pulling latest changes in ${1} repository"
-#     if git -C $1 pull origin master &> /dev/null; then
-#         return
-#     else
-#         error "Please pull the latest changes in ${1} repository manually"
-#     fi
-# }
+function clone_dotfiles_repo() {
+    info "Cloning dotfiles repository into ${DOTFILES_REPO}"
+    if test -e $DOTFILES_REPO; then
+        substep "${DOTFILES_REPO} already exists"
+        pull_latest $DOTFILES_REPO
+        success "Pull successful in ${DOTFILES_REPO} repository"
+    else
+        url=git@bitbucket.org:Martenzi/macos-empirez.git
+        if git clone "$url" $DOTFILES_REPO; then
+            success "Cloned into ${DOTFILES_REPO}"
+        else
+            error "Cloning into ${DOTFILES_REPO} failed"
+            exit 1
+        fi
+    fi
+}
+
+function pull_latest() {
+    substep "Pulling latest changes in ${1} repository"
+    if git -C $1 pull origin-empirez master &> /dev/null; then
+        return
+    else
+        error "Please pull the latest changes in ${1} repository manually"
+    fi
+}
 
 # function configure_iterm2() {
 #     info "Configuring iTerm2"
