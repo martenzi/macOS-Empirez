@@ -41,7 +41,8 @@ function install_homebrew() {
         success "Homebrew already exists"
     else
 	#url=https://raw.githubusercontent.com/Sajjadhosn/dotfiles/master/installers/homebrew_installer
-	url=https://bitbucket.org/Martenzi/macos-empirez/src/master/homebrew_installer
+	#url=https://bitbucket.org/Martenzi/macos-empirez/src/master/homebrew_installer
+	url=https://raw.githubusercontent.com/martenzi/macOS-Empirez/master/homebrew_installer
         if /usr/bin/ruby -e "$(curl -fsSL ${url})"; then
             success "Homebrew installation succeeded"
         else
@@ -96,7 +97,7 @@ function clone_dotfiles_repo() {
         pull_latest $DOTFILES_REPO
         success "Pull successful in ${DOTFILES_REPO} repository"
     else
-        url=git@bitbucket.org:Martenzi/macos-empirez.git
+        url=https://github.com/martenzi/macOS-Empirez.git
         if git clone "$url" $DOTFILES_REPO; then
             success "Cloned into ${DOTFILES_REPO}"
         else
