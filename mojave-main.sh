@@ -161,7 +161,7 @@ function configure_iterm2() {
         defaults write com.googlecode.iterm2 \
             LoadPrefsFromCustomFolder -int 1 && \
         defaults write com.googlecode.iterm2 \
-            PrefsCustomFolder -string "/Volumes/KremlinHD/Kremlin---iTerm2/com.googlecode.iterm2.plist";
+            PrefsCustomFolder -string "~/macOS-Empirez/plistz";
     then
         success "iTerm2 configuration succeeded"
     else
@@ -171,24 +171,24 @@ function configure_iterm2() {
 }
 
 function setup_symlinks() {
-    POWERLINE_ROOT_REPO=/usr/local/lib/python3.7/site-packages
+    #POWERLINE_ROOT_REPO=/usr/local/lib/python3.7/site-packages
 	
     info "Setting up symlinks"
-    symlink "powerline" \
-        ${DOTFILES_REPO}/powerline \
-        ${POWERLINE_ROOT_REPO}/powerline/config_files
+    #symlink "powerline" \
+    #    ${DOTFILES_REPO}/powerline \
+    #    ${POWERLINE_ROOT_REPO}/powerline/config_files
 
-	symlink ".bash_aliases" ${DOTFILES_REPO}/bash ~/.bash_aliases
-	symlink ".bash_completion" ${DOTFILES_REPO}/bash ~/.bash_completion
-	symlink ".bash_env" ${DOTFILES_REPO}/bash ~/.bash_env
-	symlink ".bash_grep" ${DOTFILES_REPO}/bash ~/.bash_grep
-	symlink ".bash_nvm" ${DOTFILES_REPO}/bash ~/.bash_nvm
-	symlink ".bash_path" ${DOTFILES_REPO}/bash ~/.bash_path
-	symlink ".bash_profile" ${DOTFILES_REPO}/bash ~/.bash_profile
-	symlink ".bash_prompt" ${DOTFILES_REPO}/bash ~/.bash_prompt
-	symlink ".bashrc" ${DOTFILES_REPO}/bash ~/.bashrc
-	symlink ".hushlogin" ${DOTFILES_REPO}/bash ~/.hushlogin
-	symlink ".iterm2_shell_integration.bash" ${DOTFILES_REPO}/bash ~/.iterm2_shell_integration.bash
+	symlink ".bash_aliases" ${DOTFILES_REPO}/dotfilez/bash/.bash_aliases ~/.bash_aliases
+	symlink ".bash_completion" ${DOTFILES_REPO}/dotfilez/bash/.bash_completion ~/.bash_completion
+	symlink ".bash_env" ${DOTFILES_REPO}/dotfilez/bash/.bash_env ~/.bash_env
+	symlink ".bash_grep" ${DOTFILES_REPO}/dotfilez/bash/.bash_grep ~/.bash_grep
+	symlink ".bash_nvm" ${DOTFILES_REPO}/dotfilez/bash/.bash_nvm ~/.bash_nvm
+	symlink ".bash_path" ${DOTFILES_REPO}/dotfilez/bash/.bash_path ~/.bash_path
+	symlink ".bash_profile" ${DOTFILES_REPO}/dotfilez/bash/.bash_profile ~/.bash_profile
+	symlink ".bash_prompt" ${DOTFILES_REPO}/dotfilez/bash/.bash_prompt ~/.bash_prompt
+	symlink ".bashrc" ${DOTFILES_REPO}/dotfilez/bash/.bashrc ~/.bashrc
+	symlink ".hushlogin" ${DOTFILES_REPO}/dotfilez/bash/.hushlogin ~/.hushlogin
+	symlink ".iterm2_shell_integration.bash" ${DOTFILES_REPO}/dotfilez/bash/.iterm2_shell_integration.bash ~/.iterm2_shell_integration.bash
 	success "Symlinks successfully setup"
 	
 #  ## ## ## ## ## My "Spectacle" Attempt ## ## ## ## ## ## ## ## ##
