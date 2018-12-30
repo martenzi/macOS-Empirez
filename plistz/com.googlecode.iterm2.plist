@@ -144,7 +144,7 @@
 	<key>NSFontPanelAttributes</key>
 	<string>1, 0</string>
 	<key>NSNavLastRootDirectory</key>
-	<string>/Volumes/SpaceX/SpX---Configuration---HQ/Config---Plist-Database/Config---iTerm2---Plist</string>
+	<string>~/macOS-Empirez/appz</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
 	<string>{744, 574}</string>
 	<key>NSQuotedKeystrokeBinding</key>
@@ -188,9 +188,9 @@
 	<key>NSWindow Frame SessionsPreferences</key>
 	<string>400 208 606 469 0 0 2560 1440 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>432 841 918 452 0 0 2560 1417 </string>
+	<string>432 857 796 486 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>494 175 1932 471 0 0 2560 1417 </string>
+	<string>322 204 1932 471 0 0 2560 1417 </string>
 	<key>New Bookmarks</key>
 	<array>
 		<dict>
@@ -1431,7 +1431,7 @@
 	<key>NoSyncInstallationId</key>
 	<string>E0401DEA-83E9-43AE-9410-411C01F94484</string>
 	<key>NoSyncLastTipTime</key>
-	<real>567692307.12455797</real>
+	<real>567871421.66159904</real>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -1459,6 +1459,8 @@
 		<string>0009</string>
 		<string>0010</string>
 		<string>0011</string>
+		<string>0012</string>
+		<string>0013</string>
 	</array>
 	<key>OpenArrangementAtStartup</key>
 	<false/>
@@ -1500,7 +1502,7 @@
 		</dict>
 	</dict>
 	<key>PrefsCustomFolder</key>
-	<string>/Volumes/SpaceX/SpX---Configuration---HQ/Config---Plist-Database/Config---iTerm2---Plist</string>
+	<string>/Users/z/macOS-Empirez/appz</string>
 	<key>RunJobsInServers</key>
 	<false/>
 	<key>SUEnableAutomaticChecks</key>
