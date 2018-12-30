@@ -122,7 +122,7 @@ function clone_dotfiles_repo() {
 
 function pull_latest() {
     substep "Pulling latest changes in ${1} repository"
-    if git -C $1 pull origin-empirez master &> /dev/null; then
+    if git -C $1 pull github master &> /dev/null; then
         return
     else
         error "Please pull the latest changes in ${1} repository manually"
