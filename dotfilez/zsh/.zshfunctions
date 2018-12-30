@@ -1,5 +1,5 @@
-source:
-http://chneukirchen.org/blog/archive/2015/02/10-fancy-zsh-tricks-you-may-not-know.html
+#source:
+#http://chneukirchen.org/blog/archive/2015/02/10-fancy-zsh-tricks-you-may-not-know.html
 
 
 # When editing long lines in the zle line editor, sometimes you want to move “by physical line”, that is, to the character in the terminal line below (like gj and gk in vim).
@@ -12,12 +12,12 @@ zle -N physical-up-line _physical_up_line
 zle -N physical-down-line _physical_down_line
 bindkey "\e\e[A" physical-up-line
 bindkey "\e\e[B" physical-down-line
-Now, ESC-up and ESC-down will move by physical line.
+# Now, ESC-up and ESC-down will move by physical line.
 
 # Sometimes it’s nice to do things in random order. Many tools such as image viewers, music or media players have a “shuffle” mode, but when they don’t, you can help yourself with this small trick:
 
 SHUF='oe|REPLY=${(l:5::0:)RANDOM}${(l:5::0:)RANDOM}${(l:5::0:)RANDOM}|'
-Just append ($SHUF) to any glob, and get the matches shuffled:
+# Just append ($SHUF) to any glob, and get the matches shuffled:
 
 % touch a b c d
 % echo *($SHUF)
