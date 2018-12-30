@@ -40,7 +40,7 @@ brew "watch" # Executes a program periodically, showing output fullscreen
 # Coding Languages
 brew "perl" # Highly capable, feature-rich programming language
 brew "ruby" # Powerful, clean, object-oriented scripting language
-brew "python3"
+brew "python"
 brew "python@2"
 brew "pyenv"
 
