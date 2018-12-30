@@ -8,16 +8,28 @@ main() {
     # Cloning Dotfiles repository for install_packages_with_brewfile
     # to have access to Brewfile
     clone_dotfiles_repo
+    # Installing all packages in Dotfiles repository's Brewfile
+    #install_packages_with_brewfile
+    # Changing default shell to Fish
+    #change_shell_to_fish
     # Installing pip packages so that setup_symlinks can setup the symlinks
     install_pip_packages
-#     Configuring iTerm2
-#     configure_iterm2
-#     Update /etc/hosts
-#     update_hosts_file
-#     Setting up macOS defaults
-#     setup_macOS_defaults
-#     Updating login items
-#     update_login_items
+    # Installing yarn packages
+    #install_yarn_packages
+    # Setting up symlinks so that setup_vim can install all plugins
+    setup_symlinks
+    # Setting up Vim
+    setup_vim
+    # Setting up tmux
+    #setup_tmux
+    # Configuring iTerm2
+    configure_iterm2
+    # Update /etc/hosts
+    #update_hosts_file
+    # Setting up macOS defaults
+    #setup_macOS_defaults
+    # Updating login items
+    #update_login_items
 }
 
 DOTFILES_REPO=~/macOS-Empire
@@ -69,7 +81,7 @@ function install_packages_with_brewfile() {
 }
 
 function install_pip_packages() {
-#    pip_packages=(powerline-status requests flake8)
+    pip_packages=(powerline-status requests flake8)
     info "Installing pip packages \"${pip_packages[*]}\""
 
     pip3_list_outcome=$(pip3 list)
@@ -117,20 +129,102 @@ function pull_latest() {
     fi
 }
 
-# function configure_iterm2() {
-#     info "Configuring iTerm2"
-#     if \
-#         defaults write com.googlecode.iterm2 \
-#             LoadPrefsFromCustomFolder -int 1 && \
-#         defaults write com.googlecode.iterm2 \
-#             PrefsCustomFolder -string "/Volumes/SpaceX/SpX---Configuration---HQ/Config---Plist-Database/Config---iTerm2---Plist/com.googlecode.iterm2.plist";
-#     then
-#         success "iTerm2 configuration succeeded"
-#     else
-#         error "iTerm2 configuration failed"
-#         exit 1
-#     fi
-# }
+function setup_vim() {
+    info "Setting up vim"
+    substep "Installing Vundle"
+    if test -e ~/.vim/bundle/Vundle.vim; then
+        substep "Vundle already exists"
+        pull_latest ~/.vim/bundle/Vundle.vim
+        substep "Pull successful in Vundle's repository"
+    else
+        url=https://github.com/VundleVim/Vundle.vim.git
+        if git clone "$url" ~/.vim/bundle/Vundle.vim; then
+            substep "Vundle installation succeeded"
+        else
+            error "Vundle installation failed"
+            exit 1
+        fi
+    fi
+    substep "Installing all plugins"
+    if vim +PluginInstall +qall 2> /dev/null; then
+        substep "Plugin installation succeeded"
+    else
+        error "Plugin installation failed"
+        exit 1
+    fi
+    success "vim successfully setup"
+}
+
+function configure_iterm2() {
+    info "Configuring iTerm2"
+    if \
+        defaults write com.googlecode.iterm2 \
+            LoadPrefsFromCustomFolder -int 1 && \
+        defaults write com.googlecode.iterm2 \
+            PrefsCustomFolder -string "/Volumes/KremlinHD/Kremlin---iTerm2/com.googlecode.iterm2.plist";
+    then
+        success "iTerm2 configuration succeeded"
+    else
+        error "iTerm2 configuration failed"
+        exit 1
+    fi
+}
+
+function setup_symlinks() {
+    POWERLINE_ROOT_REPO=/usr/local/lib/python3.7/site-packages
+	
+    info "Setting up symlinks"
+    symlink "powerline" \
+        ${DOTFILES_REPO}/powerline \
+        ${POWERLINE_ROOT_REPO}/powerline/config_files
+
+	symlink ".bash_aliases" ${DOTFILES_REPO}/bash ~/.bash_aliases
+	symlink ".bash_completion" ${DOTFILES_REPO}/bash ~/.bash_completion
+	symlink ".bash_env" ${DOTFILES_REPO}/bash ~/.bash_env
+	symlink ".bash_grep" ${DOTFILES_REPO}/bash ~/.bash_grep
+	symlink ".bash_nvm" ${DOTFILES_REPO}/bash ~/.bash_nvm
+	symlink ".bash_path" ${DOTFILES_REPO}/bash ~/.bash_path
+	symlink ".bash_profile" ${DOTFILES_REPO}/bash ~/.bash_profile
+	symlink ".bash_prompt" ${DOTFILES_REPO}/bash ~/.bash_prompt
+	symlink ".bashrc" ${DOTFILES_REPO}/bash ~/.bashrc
+	symlink ".hushlogin" ${DOTFILES_REPO}/bash ~/.hushlogin
+	symlink ".iterm2_shell_integration.bash" ${DOTFILES_REPO}/bash ~/.iterm2_shell_integration.bash
+	success "Symlinks successfully setup"
+	
+#  ## ## ## ## ## My "Spectacle" Attempt ## ## ## ## ## ## ## ## ##
+#    SPECTACLE_DEST_PATH=~/Library/Application Support/Spectacle
+#    #symlink "spectacle" \
+#    # the above line should be commented out and used instead of the "cp" below
+#    # when Spectacle fixes the sorting issue of Shortcuts.json file
+#	--> My idea here is to force create a dir if none exist (if app have not been opened yet)
+#	--> I´m unfamiliar with the syntax and functionality - this is merely a copy/paste attempt based on deduction
+#	if test ! -e ~/Library/Application Support/Spectacle; then
+#        substep "Creating ${SPECTACLE_DEST_PATH}"
+#        mkdir -p "$SPECTACLE_DEST_PATH"
+#    fi
+#    cp \
+#       ${DOTFILES_REPO}/appz/Shortcuts.json \
+#       ~/Library/Application\ Support/Spectacle/Shortcuts.json
+ ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
+}
+
+function symlink() {
+    application=$1
+    point_to=$2
+    destination=$3
+    destination_dir=$(dirname "$destination")
+
+    if test ! -e "$destination_dir"; then
+        substep "Creating ${destination_dir}"
+        mkdir -p "$destination_dir"
+    fi
+    if rm -rf "$destination" && ln -s "$point_to" "$destination"; then
+        substep "Symlinking ${application} done"
+    else
+        error "Symlinking ${application} failed"
+        exit 1
+    fi
+}
 
 # function update_hosts_file() {
 #     info "Updating /etc/hosts"
@@ -224,6 +318,5 @@ function success() {
 function error() {
     coloredEcho "$1" red "========>"
 }
-
 
 main "$@"
